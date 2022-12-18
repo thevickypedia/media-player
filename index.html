@@ -7,18 +7,18 @@
   <title>Document</title>
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
-  <script src="night.js" defer></script>
   <link rel="stylesheet" href="night.css">
+  <script src="night.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 </head>
 <div class="toggler fa fa-moon-o"></div>
 <body>
   <div class="video-container paused" data-volume-level="high">
-    <img class="thumbnail-img">
+    <img class="thumbnail-img" src="">
     <div class="video-controls-container">
       <div class="timeline-container">
         <div class="timeline">
-          <img class="preview-img">
+          <img class="preview-img" src="">
           <div class="thumb-indicator"></div>
         </div>
       </div>
@@ -46,16 +46,16 @@
           <input class="volume-slider" type="range" min="0" max="1" step="any" value="1">
         </div>
         <div class="duration-container">
-          <div class="current-time">0:00</div>
+          <div class="current-time" style="font-family: Arial; font-size: 75%">0:00</div>
           /
-          <div class="total-time"></div>
+          <div class="total-time" style="font-family: Arial; font-size: 75%"></div>
         </div>
         <button class="captions-btn">
           <svg viewBox="0 0 24 24">
             <path fill="currentColor" d="M18,11H16.5V10.5H14.5V13.5H16.5V13H18V14A1,1 0 0,1 17,15H14A1,1 0 0,1 13,14V10A1,1 0 0,1 14,9H17A1,1 0 0,1 18,10M11,11H9.5V10.5H7.5V13.5H9.5V13H11V14A1,1 0 0,1 10,15H7A1,1 0 0,1 6,14V10A1,1 0 0,1 7,9H10A1,1 0 0,1 11,10M19,4H5C3.89,4 3,4.89 3,6V18A2,2 0 0,0 5,20H19A2,2 0 0,0 21,18V6C21,4.89 20.1,4 19,4Z" />
           </svg>
         </button>
-        <button class="speed-btn wide-btn">
+        <button class="speed-btn wide-btn" style="font-family: Arial; font-size: 90%">
           1x
         </button>
         <button class="mini-player-btn">

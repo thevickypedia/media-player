@@ -34,7 +34,7 @@ def save_img(iter_val: int, frame: numpy.ndarray) -> NoReturn:
     cv2.imwrite(filename, thumbnail)
 
 
-def run(filename: Union[str, os.PathLike], frame_interval: int = 10) -> NoReturn:
+def run(filename: Union[str, os.PathLike], frame_interval: int = 5) -> NoReturn:
     """Extract frames from the video and create thumbnails for one of each.
 
     Args:
@@ -103,7 +103,7 @@ def video_to_frames(filename: Union[str, os.PathLike], interval: int) -> Iterabl
                 warnings.warn(
                     "Failed to seek to frame %s" % frame
                 )
-                break  # Break loop when failed to seek and to traditional way
+                break  # Break loop when failed to seek and generate the remaining thumbnails in a traditional way
 
         if remaining := sorted(list(set(frame_ids) - set(processed_frames))):
             count = 0

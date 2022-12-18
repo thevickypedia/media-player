@@ -84,7 +84,7 @@ function handleTimelineUpdate(e) {
   const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width
   const thumbnailNumber = Math.max(
     1,
-    Math.floor((percent * video.duration) / 10)
+    Math.floor((percent * video.duration) / 5)
   )
   const previewImgSrc = `source/thumbnails/thumbnail_${thumbnailNumber}.jpg`
   previewImg.src = previewImgSrc
