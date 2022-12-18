@@ -89,13 +89,23 @@ def video_to_frames(filename: Union[str, os.PathLike], interval: int) -> Iterabl
         frame_ids.insert(0, 0)  # Insert frame at 0th second at 0th position in the list
         frame_ids.append(frame_count - 1)  # Insert the frame at last second at the last position in the list
 
-        count = 0
-        success, image = cap.read()  # Read the initial frame
-        while success:
-            if count in frame_ids:
-                yield image  # Yield the frame when the count matches the frame ID required for thumbnails
-            success, image = cap.read()  # Keep reading frames until the end of the video
-            count += 1
+        for frame in frame_ids:
+            cap.set(cv2.CAP_PROP_POS_FRAMES, frame)
+            success, image = cap.read()
+            if success:
+                yield image
+            else:
+                raise Exception(
+                    f"Failed to read image at {frame}"
+                )
+
+        # count = 0
+        # success, image = cap.read()  # Read the initial frame
+        # while success:
+        #     if count in frame_ids:
+        #         yield image  # Yield the frame when the count matches the frame ID required for thumbnails
+        #     success, image = cap.read()  # Keep reading frames until the end of the video
+        #     count += 1
 
 
 def image_to_thumbs(img: numpy.ndarray, size: int = 160) -> numpy.ndarray:
