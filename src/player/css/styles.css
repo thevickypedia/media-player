@@ -2,6 +2,11 @@
   box-sizing: border-box;
 }
 
+h1 {
+  text-align: center;
+  font-family: Arial;
+}
+
 body {
   margin: 0;
 }

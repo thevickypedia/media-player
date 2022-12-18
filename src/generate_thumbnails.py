@@ -28,7 +28,7 @@ def save_img(iter_val: int, frame: numpy.ndarray) -> NoReturn:
         iter_val: Iterative number to form the filename.
         frame: Image frame that has to be stored for each file.
     """
-    filename = os.path.join("source", "thumbnails", "thumbnail_" + str(iter_val + 1) + ".jpg")
+    filename = os.path.join("player", "source", "thumbnails", "thumbnail_" + str(iter_val + 1) + ".jpg")
     LOGGER.info("Generating thumbnail %s" % filename)
     thumbnail = image_to_thumbs(img=frame)
     cv2.imwrite(filename, thumbnail)
@@ -46,8 +46,8 @@ def run(filename: Union[str, os.PathLike], frame_interval: int = 5) -> NoReturn:
             "%s does not exist" % filename
         )
 
-    if not os.path.isdir(os.path.join("source", "thumbnails")):
-        os.makedirs(os.path.join("source", "thumbnails"))
+    if not os.path.isdir(os.path.join("player", "source", "thumbnails")):
+        os.makedirs(os.path.join("player", "source", "thumbnails"))
 
     LOGGER.info("Extracting frames from the video")
     for index, frame in enumerate(video_to_frames(filename=filename, interval=frame_interval)):
@@ -134,4 +134,4 @@ def image_to_thumbs(img: numpy.ndarray, size: int = 160) -> numpy.ndarray:
 
 
 if __name__ == '__main__':
-    run(filename="source/video.mp4")
+    run(filename=os.path.join("player", "source", "video.mp4"))
