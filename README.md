@@ -1,5 +1,5 @@
 # Media Player
-Advanced video player using CSS and JS
+An advanced video player using CSS and JS
 
 Use [generate_thumbnails.py][thumbnail] to generate the preview thumbnails displayed above the slider.
 
