@@ -3,7 +3,7 @@ YouTube video player
 
 
 ### Credits:
-- Player UI: [WebDevSimplified][player[]
+- Player UI: [WebDevSimplified][player]
 - Thumbnail Generator: [JacopoDaeli][gist]
 
 [player]: https://github.com/WebDevSimplified/youtube-video-player-clone
