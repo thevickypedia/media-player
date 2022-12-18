@@ -1,6 +1,7 @@
 import logging
 import math
 import os
+import warnings
 from multiprocessing.pool import ThreadPool
 from typing import Union, Iterable, NoReturn
 
@@ -89,23 +90,29 @@ def video_to_frames(filename: Union[str, os.PathLike], interval: int) -> Iterabl
         frame_ids.insert(0, 0)  # Insert frame at 0th second at 0th position in the list
         frame_ids.append(frame_count - 1)  # Insert the frame at last second at the last position in the list
 
+        processed_frames = []
         for frame in frame_ids:
             cap.set(cv2.CAP_PROP_POS_FRAMES, frame)
             success, image = cap.read()
             if success:
-                yield image
+                processed_frames.append(frame)
+                yield image  # Yield the frame when the count matches the frame ID required for thumbnails
             else:
-                raise Exception(
-                    f"Failed to read image at {frame}"
+                # cap.set(cv2.CAP_PROP_POS_FRAMES, 0)  # Reset seeker to frame 0
+                cap = cv2.VideoCapture(filename)  # Reset video capture if seek failed
+                warnings.warn(
+                    "Failed to seek to frame %s" % frame
                 )
+                break  # Break loop when failed to seek and to traditional way
 
-        # count = 0
-        # success, image = cap.read()  # Read the initial frame
-        # while success:
-        #     if count in frame_ids:
-        #         yield image  # Yield the frame when the count matches the frame ID required for thumbnails
-        #     success, image = cap.read()  # Keep reading frames until the end of the video
-        #     count += 1
+        if remaining := sorted(list(set(frame_ids) - set(processed_frames))):
+            count = 0
+            success, image = cap.read()  # Read the initial frame
+            while success:
+                if count in remaining:
+                    yield image  # Yield the frame when the count matches the frame ID required for thumbnails
+                success, image = cap.read()  # Keep reading frames until the end of the video
+                count += 1
 
 
 def image_to_thumbs(img: numpy.ndarray, size: int = 160) -> numpy.ndarray:
