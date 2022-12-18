@@ -1,9 +1,15 @@
 import math
 import os
-from typing import Union
+from threading import Thread
+from typing import Union, Iterable
 
 import cv2
 import numpy
+
+
+def save_img(filename: Union[str, os.PathLike], thumbnail: numpy.ndarray):
+    """Writes the image to a file."""
+    cv2.imwrite(filename, thumbnail)
 
 
 def run(filename: Union[str, os.PathLike]):
@@ -13,20 +19,19 @@ def run(filename: Union[str, os.PathLike]):
             "%s does not exist" % filename
         )
 
-    # Extract frames from video
-    print("Extracting frames from video")
-    frames = video_to_frames(filename=filename)
-
-    # Generate and save thumbs
     print("Generate and save thumbs")
-    for i in range(len(frames)):
-        thumb = image_to_thumbs(img=frames[i])
-        os.makedirs('frames/%d' % i)
-        for k, v in thumb.items():
-            cv2.imwrite('frames/%d/%s.png' % (i, k), v)
+    thumb_dir = os.path.join("source", "thumbnails")
+    if not os.path.isdir(thumb_dir):
+        os.makedirs(thumb_dir)
+    for index, frame in enumerate(video_to_frames(filename=filename)):  # Extract frames from video
+        for thumb in image_to_thumbs(img=frame):  # Generate and save thumbs
+            fname = os.path.join(thumb_dir, "thumbnail_" + str(index + 1) + ".jpg")
+            print(f'Storing {fname}')
+            # TODO: Implement concurrency instead of repeated threads
+            Thread(target=save_img, kwargs={'filename': fname, 'thumbnail': thumb}).start()
 
 
-def video_to_frames(filename: Union[str, os.PathLike]):
+def video_to_frames(filename: Union[str, os.PathLike]) -> Iterable[numpy.ndarray]:
     """Extract frames from video"""
     cap = cv2.VideoCapture(filename)
     fps = cap.get(cv2.CAP_PROP_FPS)
@@ -35,7 +40,7 @@ def video_to_frames(filename: Union[str, os.PathLike]):
     video_duration = frame_count / fps
     frames_required = int(video_duration / 10)
     frame_split = []
-    print("Video duration: %s" % video_duration)
+    print("Video duration: ~%s %s" % (int(video_duration), "seconds"))
     print("Frames required: %s" % frames_required)
 
     i = 0
@@ -45,10 +50,9 @@ def video_to_frames(filename: Union[str, os.PathLike]):
         frame_split.append(math.ceil(i * 100) / 100)
     frame_split = [i for i in frame_split if i < 1]  # Values go beyond 1 but we don't need that
 
-    frames = []
     if cap.isOpened() and frame_count > 0:
         # Get frame ID of the thumbnail locations
-        frame_ids = [round(frame_count * split_at) for split_at in frame_split]
+        frame_ids = [round(frame_count * split_at - 0.25) for split_at in frame_split]
         frame_ids.insert(0, 0)
         frame_ids.append(frame_count - 1)
 
@@ -56,21 +60,20 @@ def video_to_frames(filename: Union[str, os.PathLike]):
         success, image = cap.read()
         while success:
             if count in frame_ids:
-                frames.append(image)
+                yield image
             success, image = cap.read()
             count += 1
-    return frames
 
 
-def image_to_thumbs(img: numpy.ndarray):
+def image_to_thumbs(img: numpy.ndarray) -> Iterable[numpy.ndarray]:
     """Create thumbs from image"""
-    # TODO: Figure out the right size required and store it in thumbnails within source dir
     height, width, channels = img.shape
-    thumbs = {"original": img}
-    sizes = [640, 320, 160]
-    for size in sizes:
-        if width >= size:
-            r = (size + 0.0) / width
-            max_size = (size, int(height * r))
-            thumbs[str(size)] = cv2.resize(img, max_size, interpolation=cv2.INTER_AREA)
-    return thumbs
+    size = 160
+    if width >= size:
+        r = (size + 0.0) / width
+        max_size = (size, int(height * r))
+        yield cv2.resize(img, max_size, interpolation=cv2.INTER_AREA)
+
+
+if __name__ == '__main__':
+    run(filename="source/video.mp4")
