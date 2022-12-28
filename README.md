@@ -7,4 +7,4 @@ Use [generate_thumbnails.py][thumbnail] to generate the preview thumbnails displ
 Base for the UI: [WebDevSimplified][player]
 
 [player]: https://github.com/WebDevSimplified/youtube-video-player-clone
-[thumbnail]: https://github.com/thevickypedia/media-player/blob/main/generate_thumbnails.py
+[thumbnail]: https://github.com/thevickypedia/media-player/blob/main/src/generate_thumbnails.py
