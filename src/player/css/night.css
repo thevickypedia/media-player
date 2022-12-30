@@ -1,7 +1,4 @@
 @import url('//netdna.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
-body {
-    background-color: #ececec;
-}
 .night {
     background-color: #151515;
 }
@@ -30,17 +27,4 @@ body {
 .night *{
     color: #f0f0f0 !important;
     box-shadow: none;
-}
-.night .content {
-    border: 1px solid #999;
-}
-.tab {
-    margin-left: 40px;
-}
-p.center {
-    text-align: center;
-}
-.dotted {
-    border-bottom: 3px dotted #757575;
-    margin-bottom: 1px;
 }
