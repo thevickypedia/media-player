@@ -80,11 +80,12 @@ function toggleScrubbing(e) {
 }
 
 function handleTimelineUpdate(e) {
+  const frameInterval = 5
   const rect = timelineContainer.getBoundingClientRect()
   const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width
   const thumbnailNumber = Math.max(
     1,
-    Math.floor((percent * video.duration) / 5)
+    Math.floor((percent * video.duration) / frameInterval)
   )
   const previewImgSrc = `source/thumbnails/thumbnail_${thumbnailNumber}.jpg`
   previewImg.src = previewImgSrc
